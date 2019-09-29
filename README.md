@@ -31,7 +31,7 @@ You also need to place the ```api.py``` file in the current working directory be
 
 <b>Main Screen</b>
 
-![Main screen](images/screen_1.png)
+![Main screen](images/screen_1.PNG)
 <br>
 
 <b>Content Image</b>
@@ -44,7 +44,7 @@ You also need to place the ```api.py``` file in the current working directory be
 
 <b>Output Screen</b>
 
-![Output](images/screen_2.png)
+![Output](images/screen_2.PNG)
 
 ### Contributors
 
