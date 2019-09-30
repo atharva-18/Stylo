@@ -1,4 +1,3 @@
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,7 +41,7 @@ public class mainActivity {
 
 	private static final String POST_URL = "https://api.deepai.org/api/fast-style-transfer";
 
-	private static final String API_KEY = "bbc5427d-4f33-4bdf-9607-8fd36e73aec4";
+	private static final String API_KEY = "";
     
     /**
      * Launch the application.
