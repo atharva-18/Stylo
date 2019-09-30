@@ -1,4 +1,3 @@
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,7 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import java.applet.*;
 import java.awt.*;
-import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,16 +16,23 @@ import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileSystemView;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.io.File;
 
-import org.apache.commons.httpclient.*; 
-import org.apache.commons.httpclient.methods.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 public class mainActivity {
@@ -35,9 +40,14 @@ public class mainActivity {
     private JFrame frame;
     private JLabel txtStylo;
 
+	private static final String POST_URL = "https://api.deepai.org/api/fast-style-transfer";
+
+	private static final String API_KEY = "bbc5427d-4f33-4bdf-9607-8fd36e73aec4";
+    
     /**
      * Launch the application.
      */
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -50,39 +60,39 @@ public class mainActivity {
             }
         });
     }
-    public String sendRequest(String content, String style) throws IOException, InterruptedException {
-        // Process p = Runtime.getRuntime().exec("python "+System.getProperty("user.dir")+"\\src\\resources\\api.py " + content + " " + style);
-        //Comment out above line and uncomment below line when converting to jar
-        //Process p = Runtime.getRuntime().exec("python api.py");
-        // BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        // BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        // Read the output from the command
-        // System.out.println("Here is the standard output of the command:\n");
-        // System.out.println(System.getProperty("user.dir"));
-        // String s;
+    @SuppressWarnings("deprecation")
+	public String sendRequest(String content, String style) throws IOException, InterruptedException {
         String url = null;
-        // TimeUnit.SECONDS.sleep(10);
-        // while ((s = stdInput.readLine()) != null) {
-        	//            System.out.println(s);
-            // url = "" + s;
-        // }
-        // System.out.println("Here is the standard error of the command (if any):\n");
-        // while ((s = stdError.readLine()) != null) {
-        //                System.out.println(s);
-        // }
-        // System.out.println(url);
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpPost poster = new HttpPost(" https://api.deepai.org/api/fast-style-transfer");
-        MultipartEntityBuilder mpEntityBuilder = MultipartEntityBuilder.create();
-        mpEntity.addPart("content", getImage(content));
-        mpEntity.addPart("style", getImage(style));
-        mpEntityBuilder.addPart("api-key", new StringBody(""));
-        poster.setEntity(mpEntityBuilder .build());
-        HttpResponse response = httpClient.execute(poster);
-        String url = EntityUtils.toString(response.getEntity(), UTF8_CHARSET);
+
+        HttpClient httpclient = HttpClientBuilder.create().build();
+        HttpPost httppost = new HttpPost(POST_URL);
+        httppost.addHeader("api-key", API_KEY);
+        
+        File content_f = new File(content);
+        File style_f = new File(style);
+        
+        
+        MultipartEntityBuilder mpEntity = MultipartEntityBuilder.create();
+
+        ContentBody cFile = new FileBody(content_f, "image/jpeg");
+        mpEntity.addPart("content", cFile);
+        ContentBody sFile = new FileBody(style_f, "image/jpeg");
+        mpEntity.addPart("style", sFile);
+
+        httppost.setEntity(mpEntity.build());
+        System.out.println("executing request " + httppost.getRequestLine());
+        HttpResponse response = httpclient.execute(httppost);
+        HttpEntity resEntity = response.getEntity();
+
+        System.out.println(response.getStatusLine());
+        if (resEntity != null) {
+            String res = EntityUtils.toString(resEntity);
+            url = res.substring(res.lastIndexOf(": ")+3, res.length()-3);
+        }
+        System.out.println(url);
         return url;
     }
-
+    
     /**
      * Create the application.
      */
