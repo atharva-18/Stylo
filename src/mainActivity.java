@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import java.applet.*;
+import java.awt.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -23,6 +25,10 @@ import javax.swing.filechooser.FileSystemView;
 
 import java.awt.Color;
 import java.awt.Font;
+
+import org.apache.commons.httpclient.*; 
+import org.apache.commons.httpclient.methods.*;
+import org.apache.http.util.EntityUtils;
 
 public class mainActivity {
 
@@ -45,29 +51,35 @@ public class mainActivity {
         });
     }
     public String sendRequest(String content, String style) throws IOException, InterruptedException {
-        Process p = Runtime.getRuntime().exec("python "+System.getProperty("user.dir")+"\\src\\resources\\api.py " + content + " " + style);
+        // Process p = Runtime.getRuntime().exec("python "+System.getProperty("user.dir")+"\\src\\resources\\api.py " + content + " " + style);
         //Comment out above line and uncomment below line when converting to jar
         //Process p = Runtime.getRuntime().exec("python api.py");
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        // BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        // BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         // Read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
-        System.out.println(System.getProperty("user.dir"));
-        String s;
+        // System.out.println("Here is the standard output of the command:\n");
+        // System.out.println(System.getProperty("user.dir"));
+        // String s;
         String url = null;
-        TimeUnit.SECONDS.sleep(10);
-        while ((s = stdInput.readLine()) != null) {
+        // TimeUnit.SECONDS.sleep(10);
+        // while ((s = stdInput.readLine()) != null) {
         	//            System.out.println(s);
-            url = "" + s;
-        }
-        System.out.println("Here is the standard error of the command (if any):\n");
-        while ((s = stdError.readLine()) != null) {
-            //            System.out.println(s);
-        }
-
-        //        System.exit(0);
-        //		s = stdInput.readLine();
-        System.out.println(url);
+            // url = "" + s;
+        // }
+        // System.out.println("Here is the standard error of the command (if any):\n");
+        // while ((s = stdError.readLine()) != null) {
+        //                System.out.println(s);
+        // }
+        // System.out.println(url);
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost poster = new HttpPost(" https://api.deepai.org/api/fast-style-transfer");
+        MultipartEntityBuilder mpEntityBuilder = MultipartEntityBuilder.create();
+        mpEntity.addPart("content", getImage(content));
+        mpEntity.addPart("style", getImage(style));
+        mpEntityBuilder.addPart("api-key", new StringBody(""));
+        poster.setEntity(mpEntityBuilder .build());
+        HttpResponse response = httpClient.execute(poster);
+        String url = EntityUtils.toString(response.getEntity(), UTF8_CHARSET);
         return url;
     }
 
