@@ -15,7 +15,7 @@ Read more about DeepAI API <a href="https://deepai.org/machine-learning-model/fa
 
 ### Download 
 
-Download the JAR file for Windows, Linux and macOS <a href="https://github.com/atharva-18/Stylo/releases/download/1.0/Stylo.jar" target="_blank">here</a>
+Download the JAR file for Windows, Linux and macOS <a href="https://github.com/atharva-18/Stylo/archive/1.1.zip" target="_blank">here</a>
 
 ### Usage 
 
