@@ -9,8 +9,8 @@ Read more about DeepAI API <a href="https://deepai.org/machine-learning-model/fa
 
 ### Dependencies
 <ul>
-  <li>Python</li>
   <li>DeepAI account for API key</li>
+  <li>Java JDK 11.0.3</li>
 </ul>
 
 ### Download 
@@ -25,7 +25,7 @@ Run the following commands to create the executable JAR file
 $ javac mainActivity.java
 $ jar cfe Stylo.jar mainActivity *.class api.py
 ```
-You also need to place the ```api.py``` file in the current working directory before launching the application.
+Make sure that you include the external JAR files before compiling your application.
 
 ### Screenshots<br>
 
