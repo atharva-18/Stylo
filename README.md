@@ -23,7 +23,7 @@ Run the following commands to create the executable JAR file
 
 ```
 $ javac mainActivity.java
-$ jar cfe Stylo.jar mainActivity *.class api.py
+$ jar cfe Stylo.jar mainActivity *.class
 ```
 Make sure that you include the external JAR files before compiling your application.
 
